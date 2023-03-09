@@ -5,6 +5,7 @@ import { AccountModule } from "./modules/account/account.module";
 import { CategoryModule } from "./modules/category/category.module";
 import { RegisterModule } from "./modules/register/register.module";
 import { ConfigModule } from "@nestjs/config";
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -15,6 +16,7 @@ import { ConfigModule } from "@nestjs/config";
     AccountModule,
     CategoryModule,
     RegisterModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [],
