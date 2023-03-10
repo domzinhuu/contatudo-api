@@ -52,7 +52,7 @@ export class RegisterService {
 
   public async getRegisters(populate?: string[]): Promise<Register[]> {
     this.logger.log(`getting all register`);
-    return await this.registerRepository.findAll(populate);
+    return await this.registerRepository.findAll({ populate });
   }
 
   public async getRegisterById(
@@ -117,19 +117,27 @@ export class RegisterService {
         isBetterThanLastMonth: diff < 0 ? true : false,
         percentage:
           diff < 0
-            ? parseFloat(((sumPreviousCategory / sumAcutalCategory - 1) * 100).toFixed(2))
-            : parseFloat(((sumAcutalCategory / sumPreviousCategory - 1) * 100).toFixed(2)),
+            ? parseFloat(
+                ((sumPreviousCategory / sumAcutalCategory - 1) * 100).toFixed(2)
+              )
+            : parseFloat(
+                ((sumAcutalCategory / sumPreviousCategory - 1) * 100).toFixed(2)
+              ),
       };
       return comparision;
     });
-   
-    return comparisionDataDto
+
+    return comparisionDataDto;
   }
 
-  public async getRegisterByCategory(id:string,startDate?:string,endDate?:string):Promise<Register[]>{
-    const {start,end} = this.mountPeriod(startDate,endDate)
+  public async getRegisterByCategory(
+    id: string,
+    startDate?: string,
+    endDate?: string
+  ): Promise<Register[]> {
+    const { start, end } = this.mountPeriod(startDate, endDate);
 
-    return this.registerRepository.findAll()
+    return this.registerRepository.findAll();
   }
 
   private mountPeriod(

@@ -1,4 +1,5 @@
 import { Model } from 'mongoose';
+import { QueryHelper } from './helpers/query-helper';
 
 export class BaseRepository<T> {
   constructor(protected schemaModel: Model<T>) {}
@@ -13,8 +14,14 @@ export class BaseRepository<T> {
     return this.schemaModel.findOne(parameter).populate(populate);
   }
 
-  async findAll(populate?: string[]): Promise<any[]> {
-    return this.schemaModel.find().populate(populate).exec();
+  async findAll(queryhelper:QueryHelper = {}): Promise<any[]> {
+    let result = this.schemaModel.find(queryhelper.filters).populate(queryhelper.populate)
+
+    if(queryhelper.select){
+      return result.select(queryhelper.select).exec()
+    }
+
+    return result.exec() 
   }
 
   async update(id: string, data: any): Promise<any> {
