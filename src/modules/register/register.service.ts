@@ -126,6 +126,12 @@ export class RegisterService {
     return comparisionDataDto
   }
 
+  public async getRegisterByCategory(id:string,startDate?:string,endDate?:string):Promise<Register[]>{
+    const {start,end} = this.mountPeriod(startDate,endDate)
+
+    return this.registerRepository.findAll()
+  }
+
   private mountPeriod(
     startDate?: string,
     endDate?: string

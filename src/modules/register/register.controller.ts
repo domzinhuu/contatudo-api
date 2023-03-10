@@ -6,19 +6,18 @@ import {
   Param,
   Post,
   Query,
-} from '@nestjs/common';
-import { query } from 'express';
-import { Register } from 'src/schemas/register.schema';
-import { CreateRegisterDto } from './dtos/create-register';
-import { RegisterService } from './register.service';
+} from "@nestjs/common";
+import { Register } from "src/schemas/register.schema";
+import { CreateRegisterDto } from "./dtos/create-register";
+import { RegisterService } from "./register.service";
 
-@Controller('api/v1/register')
+@Controller("api/v1/register")
 export class RegisterController {
   constructor(private readonly registerService: RegisterService) {}
 
   @Post()
   public async saveRegister(
-    @Body() createRegisterDto: CreateRegisterDto,
+    @Body() createRegisterDto: CreateRegisterDto
   ): Promise<void> {
     await this.registerService.save(createRegisterDto);
   }
@@ -28,10 +27,10 @@ export class RegisterController {
     return this.registerService.getRegisters();
   }
 
-  @Get('/:id')
+  @Get("/:id")
   public async getRegisterById(
     @Param() { id },
-    @Query() { populate },
+    @Query() { populate }
   ): Promise<Register> {
     let filterPopulate = undefined;
 
@@ -41,7 +40,15 @@ export class RegisterController {
     return this.registerService.getRegisterById(id, filterPopulate);
   }
 
-  @Delete('/:id')
+  @Get("/byCategory/:id")
+  public async getRegistersByCategory(
+    @Param() { id },
+    @Query() { startDate, endDate }
+  ) {
+    return this.registerService.getRegisterByCategory(id, startDate, endDate);
+  }
+
+  @Delete("/:id")
   public async deleteRegister(@Param() { id }): Promise<void> {
     return this.registerService.deleteRegister(id);
   }
