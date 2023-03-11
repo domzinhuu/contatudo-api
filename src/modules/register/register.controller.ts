@@ -40,12 +40,17 @@ export class RegisterController {
     return this.registerService.getRegisterById(id, filterPopulate);
   }
 
-  @Get("/byCategory/:id")
+  @Get("/account/:accountId/category/:categoryId")
   public async getRegistersByCategory(
-    @Param() { id },
+    @Param() { accountId, categoryId },
     @Query() { startDate, endDate }
   ) {
-    return this.registerService.getRegisterByCategory(id, startDate, endDate);
+    return this.registerService.getRegisterByCategory(
+      accountId,
+      categoryId,
+      startDate,
+      endDate
+    );
   }
 
   @Delete("/:id")

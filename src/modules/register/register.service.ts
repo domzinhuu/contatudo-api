@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 import { groupBy, sumBy } from "lodash";
 import { DateTime } from "luxon";
+import { QueryHelper } from "src/helpers/query-helper";
 import { Register } from "src/schemas/register.schema";
 import { AccountService } from "../account/account.service";
 import { CategoryService } from "../category/category.service";
@@ -131,13 +132,21 @@ export class RegisterService {
   }
 
   public async getRegisterByCategory(
-    id: string,
+    accountId: string,
+    categoryId: string,
     startDate?: string,
     endDate?: string
   ): Promise<Register[]> {
     const { start, end } = this.mountPeriod(startDate, endDate);
-
-    return this.registerRepository.findAll();
+    const query: QueryHelper = {
+      filters: {
+        account: accountId,
+        category: categoryId,
+        createdAt: { $gte: start, $lte: end },
+      },
+      populate: ["category"],
+    };
+    return this.registerRepository.findAll(query);
   }
 
   private mountPeriod(
