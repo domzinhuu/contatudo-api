@@ -10,7 +10,7 @@ import { DateTime } from "luxon";
 import { CategoryService } from "../category/category.service";
 import { RegisterService } from "../register/register.service";
 import { ComparisionDataDto } from "./dto/comparision-data.dto";
-import { DashboardTotalDataDto } from "./dto/dashboard-total-data.dto";
+import { DashboardTotalDataDto, monthList } from "./dto/dashboard-total-data.dto";
 import { HomeRequestFiltersDto } from "./dto/home-request-filters.dto";
 
 @Controller("api/v1/dashboard")
@@ -40,8 +40,12 @@ export class DashboardController {
         value: sumBy(groupedByCategories[cat], "value"),
       };
     });
-
     responseData.period = DateTime.fromISO(startDate).monthLong;
+
+    if(!startDate){
+      responseData.period = monthList[DateTime.now().monthLong]
+    }
+    
     responseData.totalByCategories = categoriesWithTotal;
     responseData.totalPeriod = totalByPeriod;
 
