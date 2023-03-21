@@ -1,6 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { Account } from 'src/schemas/account.schema';
-import { AccountRepository } from './account.repository';
+import { Injectable, Logger } from "@nestjs/common";
+import { Account } from "src/schemas/account.schema";
+import { UserService } from "../user/user.service";
+import { AccountRepository } from "./account.repository";
 @Injectable()
 export class AccountService {
   private readonly logger = new Logger(AccountService.name);
@@ -19,14 +20,14 @@ export class AccountService {
 
   async getAccountById(
     accountId: string,
-    populate?: string[],
+    populate?: string[]
   ): Promise<Account> {
     return await this.accountRepository.findOne({ _id: accountId }, populate);
   }
 
   async getAccountByUser(
     userId: string,
-    populate?: string[],
+    populate?: string[]
   ): Promise<Account> {
     return await this.accountRepository.findByUser(userId, populate);
   }

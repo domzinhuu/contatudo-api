@@ -29,4 +29,9 @@ export class AccountController {
   async getAccountByUser(@Param() { userId }): Promise<Account> {
     return this.accountService.getAccountByUser(userId, ['user']);
   }
+
+  @Get('/user/email/:email')
+  async getAccountByUserEmail(@Param() { email }): Promise<Account> {
+    return this.accountService.getAccountByUser(email, ['user']);
+  }
 }

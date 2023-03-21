@@ -33,6 +33,11 @@ export class UserController {
     return this.userService.getById(id);
   }
 
+  @Get('/email/:email')
+  async getByName(@Param('email') email: string) {
+    return this.userService.getAccountByUserEmail(email);
+  }
+
   @Patch('/:id')
   @UsePipes(ValidationPipe)
   async updateUser(@Param('id') id: string, @Body() userDto: UpdateUserDto) {

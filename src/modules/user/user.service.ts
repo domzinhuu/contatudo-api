@@ -3,12 +3,13 @@ import {
   Inject,
   Injectable,
   Logger,
-} from '@nestjs/common';
-import { User } from 'src/schemas/user.schema';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { AccountService } from 'src/modules/account/account.service';
-import { UserRepository } from './user.repository';
-import { UpdateUserDto } from './dtos/update-user.dto';
+} from "@nestjs/common";
+import { User } from "src/schemas/user.schema";
+import { CreateUserDto } from "./dtos/create-user.dto";
+import { AccountService } from "src/modules/account/account.service";
+import { UserRepository } from "./user.repository";
+import { UpdateUserDto } from "./dtos/update-user.dto";
+import { Account } from "src/schemas/account.schema";
 
 @Injectable()
 export class UserService {
@@ -28,6 +29,17 @@ export class UserService {
     return this.userRepository.findOne({ _id: id });
   }
 
+  async getAccountByUserEmail(email: string): Promise<Account> {
+    console.log(email)
+    const userFound = await this.userRepository.findOne({ email });
+    
+    if (!userFound) {
+      return null;
+    }
+    
+    return this.accountService.getAccountByUser(userFound._id, ["user"]);
+  }
+
   public async getAllUsers(): Promise<User[]> {
     return this.userRepository.findAll();
   }
@@ -36,7 +48,7 @@ export class UserService {
     const userFound = await this.userRepository.findOne({ _id: userId });
 
     if (!userFound) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException("User not found");
     }
     return this.userRepository.update(userId, userDto);
   }
